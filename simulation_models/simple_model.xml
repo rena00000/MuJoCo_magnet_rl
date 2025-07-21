@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mujoco model="simple_model">
+  <option gravity="0 0 -9.8" timestep="0.002"/>
+  <default>
+    <joint damping="0.05"/>
+  </default>
+
+  <size njmax="500" nconmax="100"/>
+  <contact>
+    <exclude body1="Ball1" body2="Leg1"/>
+    <exclude body1="Leg1" body2="Joint1"/>
+    <exclude body1="Leg2" body2="Ball2"/>
+  </contact>
+
+  <asset>
+    <texture type="skybox" builtin="flat" rgb1="1 1 1" rgb2="1 1 1" width="16" height="16"/>
+  </asset>
+
+  <worldbody>
+    <camera name="sideview" pos="0 -2 1" xyaxes="1 0 0 0 0 1"/>
+
+    <!-- 天井 -->
+    <geom name="ceiling" type="box" size="1 1 0.02" pos="0 0 1.2"
+          rgba="0.1 0.1 0.1 1" contype="0" conaffinity="0"/>
+
+    <!-- Ball1（支点） -->
+    <body name="Ball1" pos="0 0 1.13">
+      <inertial pos="0 0 0" mass="0.3" diaginertia="0.001 0.001 0.001"/>
+      <geom type="sphere" size="0.05" rgba="0.3 0.7 1 1" contype="0" conaffinity="0"/>
+      <joint name="ball1_joint" type="hinge" axis="0 1 0" range="-180 180" damping="0.05"/>
+
+      <!-- Leg1 -->
+      <body name="Leg1" pos="0 0 -0.2">
+        <inertial pos="0 0 0" mass="0.5" diaginertia="0.002 0.002 0.002"/>
+        <geom type="cylinder" size="0.05 0.2" rgba="0.8 0.8 0.8 1" contype="0" conaffinity="0"/>
+
+        <!-- Joint1 -->
+        <body name="Joint1" pos="0 0 -0.22">
+          <joint name="joint1" type="hinge" axis="0 1 0" range="-180 180" damping="0.01"/>
+          <geom type="cylinder" size="0.065 0.05" rgba="1 0 0 1" euler="90 0 0" contype="0" conaffinity="0"/>
+
+          <!-- Leg2 -->
+          <body name="Leg2" pos="0 0 -0.22">
+            <inertial pos="0 0 0" mass="0.5" diaginertia="0.002 0.002 0.002"/>
+            <geom type="cylinder" size="0.05 0.2" rgba="0.8 0.8 0.8 1" contype="0" conaffinity="0"/>
+
+            <!-- Ball2 -->
+            <body name="Ball2" pos="0 0 -0.2">
+              <inertial pos="0 0 0" mass="0.3" diaginertia="0.001 0.001 0.001"/>
+              <joint name="joint2" type="hinge" axis="0 1 0" range="-180 180" damping="0.05"/>
+              <geom type="sphere" size="0.05" rgba="0.3 0.7 1 1" contype="0" conaffinity="0"/>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <motor joint="ball1_joint" forcelimited="true" forcerange="-1.5 1.5" gear="1"/>
+    <motor joint="joint1" forcelimited="true" forcerange="-2.5 2.5" gear="1"/>
+    <motor joint="joint2" forcelimited="true" forcerange="-2.5 2.5" gear="1"/>
+  </actuator>
+</mujoco>
+
