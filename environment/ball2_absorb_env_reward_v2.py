@@ -1,3 +1,5 @@
+#失敗Ver（Ball2が天井に届いてない）
+
 import numpy as np
 from gymnasium import Env, spaces
 
